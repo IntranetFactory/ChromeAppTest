@@ -11,10 +11,35 @@
         margin: 0;
         padding: 0;
       }
+
+      .hidden {
+        display: none;
+      }
+
+      body.error {
+        height: 50px;
+      }
+
+      #content {
+        width: 100%;
+        height: 100%
+      }
+
+      #error {
+        text-align: center;
+        line-height: 50px;
+        height: 50px;
+      }
+
     </style>
   </head>
   <body>
-    <iframe id="urlFrame" src="" width="100%" height="100%" frameborder="0"></iframe>
-    <script src="js/index.js" charset="utf-8"></script>
+    <div id="content" class="hidden">
+      <iframe id="urlFrame" src="" width="100%" height="100%" frameborder="0"></iframe>
+      <script src="js/index.js" charset="utf-8"></script>
+    </div>
+    <div id="error" class="hidden">
+      Url not set. Please set url on <a href="chrome-extension://cccpjancjpjjchdpngjdlddjlmdjflno/options.html" target="_blank">options page.</a>
+    </div>
   </body>
 </html>
