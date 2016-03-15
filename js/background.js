@@ -5,6 +5,12 @@
   var apiUrl;
   var intervalId = false;
 
+  chrome.cookies.getAll({ url: apiUrl }, function (cookies) {
+    cookies.forEach(function (cookie, index) {
+      document.cookie = cookie.name + "=" + cookie.value;
+    });
+  });
+
   function refresh() {
     localStorage.get('apiUrl', function(data) {
       if (data && data.apiUrl) {
@@ -20,9 +26,10 @@
   function updateBadge(apiUrl) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = "json";
+
     xhr.withCredentials = true;
 
-    xhr.open("GET", apiUrl, true, "test", "123test");
+    xhr.open("GET", apiUrl, true);
 
     xhr.onreadystatechange = function() {
       if (xhr.readyState === 4) {
@@ -45,11 +52,17 @@
             chrome.browserAction.setIcon({
               path: '../img/error-icon-64px.png'
             });
+            chrome.browserAction.setBadgeText({
+              text: ""
+            });
           }
         } else {
           // set error icon on browserAction
           chrome.browserAction.setIcon({
             path: '../img/error-icon-64px.png'
+          });
+          chrome.browserAction.setBadgeText({
+            text: ""
           });
         }
       }

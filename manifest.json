@@ -15,7 +15,11 @@
     },
     "default_popup": "index.html"
   },
-  "permissions": [ "storage" ],
+  "permissions": [
+    "storage",
+    "cookies",
+    "*://mps.adenin.com/*"
+   ],
   "options_page": "options.html",
   "background": {
     "page": "html/background.html"
