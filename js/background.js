@@ -6,14 +6,33 @@
   var intervalId = false;
 
   chrome.cookies.getAll({ url: apiUrl }, function (cookies) {
-    cookies.forEach(function (cookie, index) {
-      document.cookie = cookie.name + "=" + cookie.value;
-    });
+    if (cookies && cookies.forEach) {
+      cookies.forEach(function (cookie, index) {
+        document.cookie = cookie.name + "=" + cookie.value;
+      });
+    }
+  });
+
+  chrome.cookies.onChanged.addListener(function(changeInfo) {
+    var _apiUrl = apiUrl;
+    var domain = changeInfo.cookie.domain;
+
+    if (!_apiUrl || _apiUrl.indexOf(domain) === -1) {
+      return;
+    }
+
+    if (changeInfo.removed) {
+      document.cookie = changeInfo.cookie.name + "=";
+    } else {
+      document.cookie = changeInfo.cookie.name + "=" + changeInfo.cookie.value;
+    }
+    refresh();
   });
 
   function refresh() {
     localStorage.get('apiUrl', function(data) {
       if (data && data.apiUrl) {
+        apiUrl = data.apiUrl;
         updateBadge(data.apiUrl);
         if (intervalId) {
           clearInterval(intervalId);

@@ -15,17 +15,13 @@
   if (saveButton) {
     saveButton.addEventListener('click', function(event) {
       var frameUrl = urlInput.value;
-
-      if (frameUrl !== "") {
-        chrome.browserAction.setIcon({ path: '../img/icon-64px.png' });
-      } else {
-        chrome.browserAction.setIcon({ path: '../img/error-icon-64px.png' });
-      }
-
       localStorage.set({
         frameUrl: frameUrl
       });
       urlEcho.innerHTML = frameUrl;
+      if (application && application.refresh) {
+        application.refresh();
+      }
     });
   }
 
