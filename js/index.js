@@ -11,12 +11,24 @@
   storage.get('serverUrl', function (data) {
     var content = document.getElementById('content');
     var error = document.getElementById('error');
+    var url = data.serverUrl;
+    
+    // remove trailing slash
+    if(url.lastIndexOf("/") == url.length - 1  ) {
+      url = url.substring(0,url.length-1);
+    }
+    
+    // if now url is provided use /Extension as default    
+    if((url.replace("://","")).indexOf("/") < 0) {
+      url += "/Extension";
+    }
+    
 
     if (data && data.serverUrl) {
       error.classList.add('hidden');
       content.classList.remove('hidden');
       document.body.classList.remove('error');
-      urlFrame.setAttribute('src', data.serverUrl);
+      urlFrame.setAttribute('src', url);
     } else {
       content.classList.add('hidden');
       error.classList.remove('hidden');
