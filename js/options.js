@@ -27,5 +27,19 @@
       urlInput.value = data.serverUrl;
     }
   });
-
+  
+  /*
+  document.getElementById('micBtn').addEventListener('click', function (event) {
+    navigator.webkitGetUserMedia({
+      audio: true,
+    }, function (stream) {
+      var track = stream.getTracks()[0];
+      track.stop();      
+      // Now we know that you have audio permission. 
+    }, function () {
+      // Aw. No permission (or no microphone available).
+    });
+  });
+  */
+  
 }());
