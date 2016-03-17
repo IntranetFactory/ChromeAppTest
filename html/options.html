@@ -10,7 +10,8 @@
     }
 
     .container {
-      margin: 0 5%
+      margin: 0 auto;
+      max-width: 600px;
     }
 
     .row {
@@ -54,11 +55,11 @@
 <body>
   <div class="container">
     <div class="row">
-      <h4>Chrome App Test options</h4>
+      <h1>Now Assistant</h1>
     </div>
     <div class="row">
       <div class="column column-10">
-        <label for="urlInput" class="flex-2">Enter an url</label>
+        <label for="urlInput" class="flex-2">Server Url</label>
         <input id="urlInput" class="flex-10" type="url"></input>
       </div>
       <div class="column column-2">
@@ -67,12 +68,15 @@
     </div>
     <div class="row">
       <div class="column column-10">
-        <label class="flex-2">Current url value</label>
+        <label class="flex-2">Current Url</label>
         <span id="urlEcho" class="flex-10"></span>
       </div>
       <div class="column column-2"></div>
     </div>
+  <!-- <br><br>
+  <button type="button" id="micBtn" class="flex">Enable Voice Recognition</button> -->
   </div>
+  
   <script src="../js/options.js"></script>
 </body>
 

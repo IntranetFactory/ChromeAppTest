@@ -82,11 +82,11 @@
   function setExtensionIconHelper(icon) {
     if (icon === "red") {
       chrome.browserAction.setIcon({
-        path: '../img/error-icon-64px.png'
+        path: '../img/icon_64.png'
       });
     } else if (icon === "green"){
       chrome.browserAction.setIcon({
-        path: '../img/icon-64px.png'
+        path: '../img/icon_64.png'
       });
     }
   }
