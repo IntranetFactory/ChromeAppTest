@@ -153,4 +153,24 @@
   refresh();
   isInitialized = true;
 
+  // There is no event to listen to when popup page opens or closes
+  // so a trick is used
+  // to detect when popup is opened a chrome.runtime.connect is called
+  // this will trigger chrome.runtime.onConnected in the background page
+  chrome.runtime.onConnect.addListener(function(incomingPort){
+    // popup is opened
+    // clear the badge
+    setBadgeTextHelper("");
+    // stop the updating
+    if (intervalId) {
+      clearInterval(intervalId);
+    }
+
+    // when popup closes incomingPort.onDisconnect will trigger
+    incomingPort.onDisconnect.addListener(function () {
+      // restart the updating
+      refresh();
+    });
+  });
+
 }());
