@@ -1,4 +1,4 @@
-(function() {
+(function () {
   'use strict';
 
   var API_RELATIVE_URL = "/api/adenin.Now.Service/CardStatus";
@@ -9,7 +9,7 @@
   var isInitialized = false;
 
   function refresh() {
-    localStorage.get('serverUrl', function(data) {
+    localStorage.get('serverUrl', function (data) {
       if (data && data.serverUrl !== undefined) {
         apiUrl = data.serverUrl + API_RELATIVE_URL;
         setCookiesForUrlHelper(apiUrl);
@@ -26,20 +26,20 @@
     // when refresh is called from cookies.onChanged handler
     // we do not want to set cookies again, because they are already set
     if (isInitialized) {
-       return;
+      return;
     }
     chrome.cookies.getAll({
       url: url
-    }, function(cookies) {
+    }, function (cookies) {
       if (cookies && cookies.forEach) {
-        cookies.forEach(function(cookie, index) {
+        cookies.forEach(function (cookie, index) {
           document.cookie = cookie.name + "=" + cookie.value;
         });
       }
     });
   }
 
-  chrome.cookies.onChanged.addListener(function(changeInfo) {
+  chrome.cookies.onChanged.addListener(function (changeInfo) {
     if (!apiUrl) {
       return;
     }
@@ -84,7 +84,7 @@
       chrome.browserAction.setIcon({
         path: '../img/icon_64.png'
       });
-    } else if (icon === "green"){
+    } else if (icon === "green") {
       chrome.browserAction.setIcon({
         path: '../img/icon_64.png'
       });
@@ -99,36 +99,54 @@
 
     xhr.open("GET", apiUrl, true);
 
-    xhr.onreadystatechange = function() {
+    xhr.onreadystatechange = function () {
       if (xhr.readyState === 4) {
         var status = xhr.status;
         var statusText = xhr.statusText;
-
+        
         if (status === 200 && statusText === "OK") {
           var response = xhr.response;
           if (response.ErrorCode === 0) {
-            var count = response.Data.visibleCardInstancesCount;
 
-            setBadgeTextHelper(count + "");
-            if (count % 2) {
-              // count is even number
-              setBadgeBackgroundColorHelper("#00FF00");
+            var counter = response.Data.cardInstanceCount;
+
+            var count = counter.newLow + counter.newHigh + counter.newNormal;
+
+            // hide bade if we have no new cards
+            if(count == 0) {
+              setBadgeTextHelper("");
             } else {
-              // count is odd number
-              setBadgeBackgroundColorHelper([255, 0, 0, 0]);
+              setBadgeTextHelper(count + "");
             }
-            setExtensionIconHelper("green");
+            
+            if (counter.newHigh + counter.newNormal == 0) {
+              // only low priority == green badge
+              setBadgeBackgroundColorHelper([0, 255, 0, 128]);
+            } else {
+              // red badge
+              setBadgeBackgroundColorHelper([255, 0, 0, 128]);
+            }
+            
+            if (count == 0 || (counter.newHigh + counter.newNormal == 0)) {
+              setExtensionIconHelper("green");
+            } else {
+              setExtensionIconHelper("red");
+            }
+            
           } else if (response.ErrorCode === 401) {
             // set error icon on browserAction
             var errorText = response.Data.ErrorText;
 
             setBadgeTextHelper("");
             setExtensionIconHelper("red");
+            
           } else if (response.ErrorCode === 404) {
             // something special should be done here but its not specified yet
           }
+          
         } else if (status === 404 && statusText === "Not Found") {
           // something special should be done here but its not specified yet
+        
         } else {
           // set error icon on browserAction
           setBadgeTextHelper("");
@@ -142,7 +160,7 @@
 
   function Application() {
     return {
-      refresh: function() {
+      refresh: function () {
         refresh();
       }
     };
@@ -157,7 +175,7 @@
   // so a trick is used
   // to detect when popup is opened a chrome.runtime.connect is called
   // this will trigger chrome.runtime.onConnected in the background page
-  chrome.runtime.onConnect.addListener(function(incomingPort){
+  chrome.runtime.onConnect.addListener(function (incomingPort) {
     // popup is opened
     // clear the badge
     setBadgeTextHelper("");
