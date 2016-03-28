@@ -11,13 +11,21 @@
   function refresh() {
     localStorage.get('serverUrl', function (data) {
       if (data && data.serverUrl !== undefined) {
-        apiUrl = data.serverUrl + API_RELATIVE_URL;
-        setCookiesForUrlHelper(apiUrl);
-        updateBadge(apiUrl);
-        if (intervalId) {
-          clearInterval(intervalId);
+        if (data.serverUrl !== "") {
+          apiUrl = data.serverUrl + API_RELATIVE_URL;
+          setCookiesForUrlHelper(apiUrl);
+          updateBadge(apiUrl);
+          if (intervalId) {
+            clearInterval(intervalId);
+          }
+          intervalId = setInterval(updateBadge, 60000, apiUrl);
+        } else {
+          if (intervalId) {
+            clearInterval(intervalId);
+          }
+          setExtensionIconHelper("red");
+          setBadgeTextHelper("");
         }
-        intervalId = setInterval(updateBadge, 60000, apiUrl);
       }
     });
   }
@@ -82,7 +90,7 @@
   function setExtensionIconHelper(icon) {
     if (icon === "red") {
       chrome.browserAction.setIcon({
-        path: '../img/icon_64.png'
+        path: '../img/icon_64_red.png'
       });
     } else if (icon === "green") {
       chrome.browserAction.setIcon({
@@ -103,7 +111,7 @@
       if (xhr.readyState === 4) {
         var status = xhr.status;
         var statusText = xhr.statusText;
-        
+
         if (status === 200 && statusText === "OK") {
           var response = xhr.response;
           if (response.ErrorCode === 0) {
@@ -113,40 +121,39 @@
             var count = counter.newLow + counter.newHigh + counter.newNormal;
 
             // hide bade if we have no new cards
-            if(count == 0) {
+            if(count === 0) {
               setBadgeTextHelper("");
             } else {
               setBadgeTextHelper(count + "");
             }
-            
-            if (counter.newHigh + counter.newNormal == 0) {
-              // only low priority == green badge
+
+            if (counter.newLow > 0 && (counter.newNormal + counter.newHigh) === 0) {
+              setExtensionIconHelper("green");
+              // low priority == green badge
               setBadgeBackgroundColorHelper([0, 255, 0, 128]);
-            } else {
-              // red badge
+            } else if (counter.newNormal > 0 && counter.newHigh === 0) {
+              setExtensionIconHelper("red");
+              // normal priority == red badge
+              setBadgeBackgroundColorHelper([0, 255, 0, 128]);
+            } else if (counter.newHigh > 0) {
+              setExtensionIconHelper("red");
+              // high priority == red badge
               setBadgeBackgroundColorHelper([255, 0, 0, 128]);
             }
-            
-            if (count == 0 || (counter.newHigh + counter.newNormal == 0)) {
-              setExtensionIconHelper("green");
-            } else {
-              setExtensionIconHelper("red");
-            }
-            
+
           } else if (response.ErrorCode === 401) {
             // set error icon on browserAction
             var errorText = response.Data.ErrorText;
 
             setBadgeTextHelper("");
             setExtensionIconHelper("red");
-            
+
           } else if (response.ErrorCode === 404) {
             // something special should be done here but its not specified yet
           }
-          
         } else if (status === 404 && statusText === "Not Found") {
           // something special should be done here but its not specified yet
-        
+
         } else {
           // set error icon on browserAction
           setBadgeTextHelper("");
