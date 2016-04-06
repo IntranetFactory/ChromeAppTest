@@ -139,6 +139,10 @@
               setExtensionIconHelper("red");
               // high priority == red badge
               setBadgeBackgroundColorHelper([255, 0, 0, 128]);
+            } else {
+              setExtensionIconHelper("green");
+              // low priority == green badge
+              setBadgeBackgroundColorHelper([0, 255, 0, 128]);
             }
 
           } else if (response.ErrorCode === 401) {
