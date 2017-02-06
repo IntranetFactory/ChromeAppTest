@@ -102,11 +102,12 @@
   function updateBadge(apiUrl) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = "json";
-
+   
     xhr.withCredentials = true;
 
     xhr.open("GET", apiUrl, true);
-
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    
     xhr.onreadystatechange = function () {
       if (xhr.readyState === 4) {
         var status = xhr.status;
@@ -129,20 +130,20 @@
 
             if (counter.newLow > 0 && (counter.newNormal + counter.newHigh) === 0) {
               setExtensionIconHelper("green");
-              // low priority == green badge
-              setBadgeBackgroundColorHelper([0, 255, 0, 128]);
+              // low priority == blue badge
+              setBadgeBackgroundColorHelper([3, 147, 201, 128]);
             } else if (counter.newNormal > 0 && counter.newHigh === 0) {
               setExtensionIconHelper("red");
-              // normal priority == red badge
-              setBadgeBackgroundColorHelper([0, 255, 0, 128]);
+              // normal priority == blue badge
+              setBadgeBackgroundColorHelper([3, 147, 201, 128]);
             } else if (counter.newHigh > 0) {
               setExtensionIconHelper("red");
               // high priority == red badge
               setBadgeBackgroundColorHelper([255, 0, 0, 128]);
             } else {
               setExtensionIconHelper("green");
-              // low priority == green badge
-              setBadgeBackgroundColorHelper([0, 255, 0, 128]);
+              // low priority == blue badge
+              setBadgeBackgroundColorHelper([3, 147, 201, 128]);
             }
 
           } else if (response.ErrorCode === 401) {
