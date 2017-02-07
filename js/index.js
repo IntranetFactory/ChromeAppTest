@@ -12,19 +12,21 @@
     var content = document.getElementById('content');
     var error = document.getElementById('error');
     var url = data.serverUrl;
-    
-    // remove trailing slash
-    if(url.lastIndexOf("/") == url.length - 1  ) {
-      url = url.substring(0,url.length-1);
-    }
-    
-    // if now url is provided use /Extension as default    
-    if((url.replace("://","")).indexOf("/") < 0) {
-      url += "/Extension";
-    }
-    
 
+    // if needs to be checked here because if data.serverUrl its not checked
+    // lastIndexOf and replace functions will fail
     if (data && data.serverUrl) {
+
+      // remove trailing slash
+      if(url.lastIndexOf("/") == url.length - 1  ) {
+        url = url.substring(0,url.length-1);
+      }
+
+      // if now url is provided use /Extension as default
+      if((url.replace("://","")).indexOf("/") < 0) {
+        url += "/Extension";
+      }
+
       error.classList.add('hidden');
       content.classList.remove('hidden');
       document.body.classList.remove('error');
