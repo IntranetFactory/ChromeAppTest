@@ -108,6 +108,7 @@
     xhr.open("GET", apiUrl, true);
     xhr.setRequestHeader('Content-Type', 'application/json');
     
+
     xhr.onreadystatechange = function () {
       if (xhr.readyState === 4) {
         var status = xhr.status;
@@ -120,6 +121,7 @@
             var counter = response.Data.cardInstanceCount;
 
             var count = counter.newLow + counter.newHigh + counter.newNormal;
+            console.log("received " + counter.newLow + " " + counter.newHigh  + " " + counter.newNormal);
 
             // hide bade if we have no new cards
             if(count === 0) {
@@ -149,18 +151,22 @@
           } else if (response.ErrorCode === 401) {
             // set error icon on browserAction
             var errorText = response.Data.ErrorText;
-
+            console.log("Error 401: "+errorText);
             setBadgeTextHelper("");
             setExtensionIconHelper("red");
 
           } else if (response.ErrorCode === 404) {
             // something special should be done here but its not specified yet
+            console.log("error " + response.ErrorCode);
+          } else {
+            console.log("error " + response.ErrorCode);
           }
         } else if (status === 404 && statusText === "Not Found") {
           // something special should be done here but its not specified yet
-
+          console.log('status === 404 && statusText === "Not Found"');
         } else {
           // set error icon on browserAction
+          console.log("request failed");
           setBadgeTextHelper("");
           setExtensionIconHelper("red");
         }
@@ -168,6 +174,7 @@
     };
 
     xhr.send();
+    console.log("request " + apiUrl);
   }
 
   function Application() {
