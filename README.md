@@ -1,10 +1,9 @@
-# ChromeAppTest chrome extension
+# Now Assistant chrome extension: Developer Version
 
 ## How to install
 
-#### 1. Clone [ChromeAppTest](https://github.com/IntranetFactory/ChromeAppTest) repository from github to a folder of your choice
-
-![Clone repository][01-clone-repo]
+#### 1. Download
+Download a clone of this repository in the top right-hand corner of the screen by clicking 'Clone or Download' and then 'Download ZIP'
 
 #### 2. Open Chrome and navigate to Settings -> Extensions
 
